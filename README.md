@@ -38,6 +38,6 @@ The project is deployed on AWS, utilizing services like S3 for static website ho
 
 - The S3 bucket hosts the static assets of the application. S3-website shows 403 Access Denied error because of changes in bucket's policy. Navigates to site by CloudFront URL
 
-### [AWS CloudFront Distribution](https://d2dnq0tvhz4gqe.cloudfront.net/)
+### [AWS CloudFront Distribution](https://d1lisrtkvyeuv1.cloudfront.net/)
 
 - The CloudFront distribution is the recommended way to access the application. It serves the content stored in the S3 bucket but with the added benefits of caching, content delivery optimization, and possibly added security configurations, making the user experience more robust and responsive.
