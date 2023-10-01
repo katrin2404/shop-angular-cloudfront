@@ -31,7 +31,7 @@ plugins:
 
 custom:
   client:
-    bucketName: second-aws-application
+    bucketName: new-aws-application
     distributionFolder: dist/app
     region: eu-west-1
 

@@ -71,10 +71,10 @@ class ServerlessPlugin {
   }
 
   // fetches the domain name from the CloudFront outputs and prints it out
-  domainInfo() {
+  async domainInfo() {
     const provider = this.serverless.getProvider("aws");
     const stackName = provider.naming.getStackName(this.options.stage);
-    const result = provider.request(
+    const result = await provider.request(
       "CloudFormation",
       "describeStacks",
       { StackName: stackName },
@@ -97,12 +97,12 @@ class ServerlessPlugin {
     throw error;
   }
 
-  invalidateCache() {
+  async invalidateCache() {
     const provider = this.serverless.getProvider("aws");
 
-    const domain = this.domainInfo();
+    const domain = await this.domainInfo();
 
-    const result = provider.request(
+    const result = await provider.request(
       "CloudFront",
       "listDistributions",
       {},
