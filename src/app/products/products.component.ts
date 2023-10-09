@@ -1,19 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductsService } from './products.service';
-import { Observable } from 'rxjs';
-import { Product } from './product.interface';
+import { Observable, of } from 'rxjs';
+import { Product, ProductsResponse } from './product.interface';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss'],
 })
-export class ProductsComponent implements OnInit {
-  readonly products$: Observable<
-    Product[]
-  > = this.productsService.getProducts();
+export class ProductsComponent {
+  products$ = this.productsService
+    .getProducts()
+    .pipe(map((result) => result.items));
 
   constructor(private readonly productsService: ProductsService) {}
-
-  ngOnInit(): void {}
 }
