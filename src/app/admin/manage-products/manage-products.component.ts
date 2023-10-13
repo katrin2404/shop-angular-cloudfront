@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { Product } from '../../products/product.interface';
 import { ProductsService } from '../../products/products.service';
 import { ManageProductsService } from './manage-products.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-manage-products',
@@ -23,7 +24,9 @@ export class ManageProductsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.products$ = this.productsService.getProducts();
+    this.products$ = this.productsService
+      .getProducts()
+      .pipe(map((result) => result.items));
   }
 
   onUploadCSV(): void {
