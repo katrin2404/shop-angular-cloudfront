@@ -13,7 +13,15 @@ import { PRODUCT_SERVICE_API } from '../core/api-endpoints';
 })
 export class ProductsService extends ApiService {
   createNewProduct(product: Product): Observable<Product> {
-    return this.http.post<Product>(`${PRODUCT_SERVICE_API}/products`, product);
+    if (!this.endpointEnabled('bff')) {
+      console.warn(
+        'Endpoint "bff" is disabled. To enable change your environment.ts config'
+      );
+      return EMPTY;
+    }
+
+    const url = this.getUrl('bff', 'products');
+    return this.http.post<Product>(url, product);
   }
 
   editProduct(id: string, changedProduct: Product): Observable<Product> {
