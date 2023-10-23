@@ -3,6 +3,10 @@ import { EMPTY, Observable } from 'rxjs';
 import { ApiService } from '../../core/api.service';
 import { switchMap } from 'rxjs/operators';
 
+interface PreSignedURL {
+  signedURL: string;
+}
+
 @Injectable()
 export class ManageProductsService extends ApiService {
   constructor(injector: Injector) {
@@ -18,8 +22,8 @@ export class ManageProductsService extends ApiService {
     }
 
     return this.getPreSignedUrl(file.name).pipe(
-      switchMap((url) =>
-        this.http.put(url, file, {
+      switchMap(({ signedURL }) =>
+        this.http.put(signedURL, file, {
           headers: {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             'Content-Type': 'text/csv',
@@ -29,10 +33,10 @@ export class ManageProductsService extends ApiService {
     );
   }
 
-  private getPreSignedUrl(fileName: string): Observable<string> {
+  private getPreSignedUrl(fileName: string): Observable<PreSignedURL> {
     const url = this.getUrl('import', 'import');
 
-    return this.http.get<string>(url, {
+    return this.http.get<PreSignedURL>(url, {
       params: {
         name: fileName,
       },
