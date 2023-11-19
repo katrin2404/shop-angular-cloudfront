@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { CheckoutService } from './checkout.service';
 import { ProductCheckout } from '../products/product.interface';
@@ -46,6 +50,7 @@ export class CartComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.cartService.getCart().subscribe(({ data }) => console.log(data));
     this.shippingInfo = this.fb.group({
       lastName: ['', Validators.required],
       firstName: ['', Validators.required],
@@ -81,5 +86,9 @@ export class CartComponent implements OnInit {
 
   remove(id: string): void {
     this.cartService.removeItem(id);
+  }
+
+  order(): void {
+    console.log('ORDERED');
   }
 }

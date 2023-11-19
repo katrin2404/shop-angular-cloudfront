@@ -1,14 +1,15 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable, Injector } from '@angular/core';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import { ApiService } from '../core/api.service';
+import { Product, ProductsResponse } from '../products/product.interface';
+import { CartResponse } from './cart.interface';
 
 @Injectable({
   providedIn: 'root',
 })
-export class CartService {
-  /** Key - item id, value - ordered amount */
+export class CartService extends ApiService {
   #cartSource = new BehaviorSubject<Record<string, number>>({});
-
   // eslint-disable-next-line @typescript-eslint/member-ordering
   cart$ = this.#cartSource.asObservable();
 
@@ -29,7 +30,22 @@ export class CartService {
     })
   );
 
-  constructor() {}
+  constructor(injector: Injector) {
+    super(injector);
+  }
+
+  getCart(): Observable<CartResponse> {
+    if (!this.endpointEnabled('cart')) {
+      console.warn(
+        'Endpoint "cart" is disabled. To enable change your environment.ts config'
+      );
+      return of({} as CartResponse);
+    }
+
+    const userId = '9fa24c5b-8145-4f5e-94e6-727c690e4a51';
+    const url = this.getUrl('cart', `api/profile/cart?userId=${userId}`);
+    return this.http.get<CartResponse>(url);
+  }
 
   addItem(id: string): void {
     this.updateCount(id, 1);
