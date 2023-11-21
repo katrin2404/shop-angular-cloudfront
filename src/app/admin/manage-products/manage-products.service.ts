@@ -1,4 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
+import { HttpHeaders } from '@angular/common/http';
 import { EMPTY, Observable } from 'rxjs';
 import { ApiService } from '../../core/api.service';
 import { switchMap } from 'rxjs/operators';
@@ -34,9 +35,16 @@ export class ManageProductsService extends ApiService {
   }
 
   private getPreSignedUrl(fileName: string): Observable<PreSignedURL> {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const auth_token = localStorage.getItem('authorization_token');
+    const headers = new HttpHeaders({
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      Authorization: `Basic ${auth_token}`
+    });
     const url = this.getUrl('import', 'import');
 
     return this.http.get<PreSignedURL>(url, {
+      headers,
       params: {
         name: fileName,
       },
