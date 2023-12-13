@@ -13,7 +13,7 @@ export class OrdersComponent implements OnInit {
 
   orders$!: Observable<Order[]>;
 
-  constructor(private readonly ordersService: OrdersService) {}
+  constructor(protected readonly ordersService: OrdersService) {}
 
   ngOnInit(): void {
     this.orders$ = this.ordersService.getOrders();
